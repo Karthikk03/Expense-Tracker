@@ -12,18 +12,18 @@
     <h2>Expense Tracker</h2>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="#">
+            <form action="#" id="create-form">
                 <h1>Create Account</h1>
                 <span>Use your Email for Registration</span>
-                <input type="text" placeholder="Name">
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="password">
+                <input type="text" placeholder="Name" id="name">
+                <input type="email" placeholder="Email" id="email">
+                <input type="password" placeholder="password" id="password">
                 <button type="submit">Sign Up</button>
             </form>
         </div>
 
         <div class="form-container sign-in-container">
-            <form action="#">
+            <form id="login-form">
                 <h1>Sign in</h1>
                 <span>use your previous credentials</span>
                 <input type="email" placeholder="Email">
@@ -53,5 +53,6 @@
     </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="main.js"></script>
 </html>
