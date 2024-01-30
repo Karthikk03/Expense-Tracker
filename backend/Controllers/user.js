@@ -1,10 +1,13 @@
 const User = require('../Models/User');
+const bcrypt=require('bcrypt');
 
 exports.postAdd = async (req, res, next) => {
     const name = req.body.name;
     const email = req.body.email;
-    const password = req.body.password;
+    let password = req.body.password;
     try {
+         password=await bcrypt.hash(password,10);
+         console.log(password);
         await User.create({ name, email, password });
         return res.json({ message: 'User created' });
 
@@ -16,8 +19,8 @@ exports.postAdd = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    
+    const{email,password}=req.body;
 
     try {
         const user = await User.findOne({
@@ -30,8 +33,10 @@ exports.login = async (req, res, next) => {
             return res.status(404).json({message:'User not found'});
         }
 
-        else if(user.password!==password){
-            return res.status(401).json({message:`password doesn't match`})
+        const match=await bcrypt.compare(password,user.password);
+
+        if(!match){
+            return res.status(401).json({message:`User not authorized`})
         }
 
         return res.status(200).json({message:'USer logined Successfully'});

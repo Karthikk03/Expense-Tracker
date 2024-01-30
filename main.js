@@ -68,20 +68,21 @@ email.addEventListener('input', () => {
 })
 
 async function loginUser(e) {
+	const existingError = document.querySelector('.noUser');
+	if (existingError) existingError.remove();
+
 	e.preventDefault();
+
 	try {
 		await axios.post(`http://localhost:3000/user/login`, { email: mail.value, password: pass.value });
 
-		mail.value='';
-		pass.value='';
-
+		mail.value = '';
+		pass.value = '';
+		alert(1);
 	}
 	catch (e) {
-		const existingError = document.querySelector('.noUser');
-		if (existingError) existingError.remove();
-
-		const invalid=document.querySelector('.invalid');
-		if(invalid) invalid.remove();
+		const invalid = document.querySelector('.invalid');
+		if (invalid) invalid.remove();
 
 		let p = document.createElement('p');
 
@@ -101,15 +102,18 @@ async function loginUser(e) {
 }
 
 mail.addEventListener('input', () => {
-	const error = document.querySelector('.noUser');
-
-	if (error) error.remove();
+	removeError('.noUser');
+	removeError('.invalid');
 })
 
 pass.addEventListener('input', () => {
-	const error = document.querySelector('.invalid');
-	if (error) error.remove();
+	removeError('.invalid');
 })
+
+function removeError(selector) {
+	const error = document.querySelector(selector);
+	if (error) error.remove();
+}
 
 
 
