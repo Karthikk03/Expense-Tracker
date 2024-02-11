@@ -1,28 +1,16 @@
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
-
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	console.log(1);
-
-	container.classList.remove("right-panel-active");
-});
 
 const loginForm = document.getElementById('login-form')
 
-const signinForm = document.getElementById('create-form');
+// const signinForm = document.getElementById('create-form');
 
 loginForm.addEventListener('submit', loginUser);
 
-signinForm.addEventListener('submit', createUser);
+// signinForm.addEventListener('submit', createUser);
 
-const name = document.getElementById('name');
-const email = document.getElementById('email');
-const password = document.getElementById('password');
+// const name = document.getElementById('name');
+// const email = document.getElementById('email');
+// const password = document.getElementById('password');
 
 let lastSentMail = '';
 
@@ -61,11 +49,11 @@ async function createUser(e) {
 }
 
 
-email.addEventListener('input', () => {
-	const error = document.querySelector('.existing');
+// email.addEventListener('input', () => {
+// 	const error = document.querySelector('.existing');
 
-	if (error) error.remove();
-})
+// 	if (error) error.remove();
+// })
 
 async function loginUser(e) {
 	const existingError = document.querySelector('.noUser');
@@ -78,7 +66,8 @@ async function loginUser(e) {
 
 		mail.value = '';
 		pass.value = '';
-		alert(1);
+		
+		window.location.href='expenses.html';
 	}
 	catch (e) {
 		const invalid = document.querySelector('.invalid');

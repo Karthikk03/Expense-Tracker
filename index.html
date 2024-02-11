@@ -11,17 +11,6 @@
 <body>
     <h2>Expense Tracker</h2>
     <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form action="#" id="create-form">
-                <h1>Create Account</h1>
-                <span>Use your Email for Registration</span>
-                <input type="text" placeholder="Name" id="name">
-                <input type="email" placeholder="Email" id="email">
-                <input type="password" placeholder="password" id="password">
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
-
         <div class="form-container sign-in-container">
             <form id="login-form">
                 <h1>Sign in</h1>
@@ -30,29 +19,15 @@
                 <input type="password" placeholder="password" id="pass">
                 <a href="#">forgot your password?</a>
                 <button type="submit">Sign in</button>
+                <p>Don't have an account?<a href="signup.html">Sign up</a></p>
             </form>
-        </div>
-
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome back</h1>
-                    <p>Please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign in</button>
-                </div>
-
-                <div class="overlay-panel overlay-right">
-                    <h1>New User!</h1>
-                    <p>Enter your personal details to create account</p>
-                    <button class="ghost" id="signUp">Sign up</button>
-                </div>
-
-            </div>
 
         </div>
+
     </div>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="main.js"></script>
+
 </html>
