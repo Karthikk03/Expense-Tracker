@@ -1,5 +1,7 @@
 const User = require('../Models/User');
 const bcrypt=require('bcrypt');
+const jwt=require('jsonwebtoken');
+const secret=require('../util/secret');
 
 exports.postAdd = async (req, res, next) => {
     const name = req.body.name;
@@ -39,9 +41,17 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({message:`User not authorized`})
         }
 
-        return res.status(200).json({message:'USer logined Successfully'});
+        const token=await generateToken(user.id,user.name);
+
+        return res.status(200).json({message:'USer logined Successfully',token});
     }
     catch (e) {
         console.log(e);
     }
+}
+
+
+async function generateToken(id,name){
+    const Key=await secret();
+    return jwt.sign({id,name},Key);
 }

@@ -9,10 +9,16 @@ app.use(cors());
 app.use(bodyparser.json());
 
 const userRoutes=require('./routes/user');
+const expenseRoutes=require('./routes/expense');
 
 app.use('/user',userRoutes);
+app.use('/expenses',expenseRoutes);
 
 const User=require('./Models/User');
+const Expense=require('./Models/Expense');
+
+Expense.belongsTo(User);
+User.hasMany(Expense);
 
 (async () => {
     try {
