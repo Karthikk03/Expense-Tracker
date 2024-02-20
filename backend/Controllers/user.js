@@ -1,7 +1,9 @@
 const User = require('../Models/User');
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
-const secret=require('../util/secret');
+const dotenv=require('dotenv');
+
+dotenv.config();
 
 exports.postAdd = async (req, res, next) => {
     const name = req.body.name;
@@ -10,7 +12,7 @@ exports.postAdd = async (req, res, next) => {
     try {
          password=await bcrypt.hash(password,10);
          console.log(password);
-        await User.create({ name, email, password });
+        await User.create({ name, email, password,totalExpense:0 });
         return res.json({ message: 'User created' });
 
     }
@@ -50,8 +52,8 @@ exports.login = async (req, res, next) => {
     }
 }
 
-
 async function generateToken(id,name){
-    const Key=await secret();
-    return jwt.sign({id,name},Key);
+console.log(process.env.secretKey);
+
+    return jwt.sign({id,name},process.env.secretKey);
 }

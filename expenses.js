@@ -1,12 +1,15 @@
 const token = localStorage.getItem('token');
 let expesneId = null;
+const expenseAmount = document.querySelector('.te');
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     const response = await axios.get(`http://localhost:3000/expenses`, { headers: { 'Authorization': token } });
-
-    response.data.forEach(item => {
+    console.log(response)
+    response.data.expenses.forEach(item => {
         addRow(item);
     })
+    expenseAmount.textContent = response.data.totalExpense;
 
 })
 
@@ -18,7 +21,7 @@ async function addExpense(e) {
     e.preventDefault();
 
     const category = document.getElementById('category').value;
-    const amount = document.getElementById('money').value;
+    const amount = document.getElementById('money').valueAsNumber;
     const date = document.getElementById('date').value;
     const description = document.getElementById('desc').value;
 
@@ -30,8 +33,11 @@ async function addExpense(e) {
     };
 
     const response = await axios.post(`http://localhost:3000/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
+    expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
     form.reset();
+
     addRow(response.data);
+
 
 }
 
@@ -65,18 +71,21 @@ document.addEventListener('click', function (event) {
     }
 });
 
+const tableBody = document.getElementById('table-data');
+
 function addRow(expense) {
     const { category, amount, date, description } = expense;
 
-    const tableBody = document.getElementById('table-data');
+
 
     const newRow = document.createElement('tr');
     newRow.setAttribute('id', expense.id);
 
     const descCell = document.createElement('td');
-    descCell.classList.add('category', category);
 
     const categoryCell = document.createElement('td');
+    descCell.classList.add('category', category);
+
     const dateCell = document.createElement('td');
     const amountCell = document.createElement('td');
 
@@ -103,7 +112,6 @@ function addRow(expense) {
     actionCell.addEventListener('click', async (e) => {
         if (e.target.classList.contains('fa-trash-alt')) {
             expesneId = e.target.closest('tr').getAttribute('id');
-            console.log(expesneId)
         }
 
     })
@@ -111,11 +119,53 @@ function addRow(expense) {
 
 }
 
+const search = document.getElementById('search');
+
+
+document.querySelector('.fa-search').addEventListener('click', (e) => {
+    search.style.display = (search.style.display === 'block') ? 'none' : 'block';
+    if (search.style.display === 'block') {
+        search.focus();
+        search.addEventListener('keyup', debouncedSearch);
+    }
+    else if (search.value !== '') {
+        search.value = '';
+        tableBody.querySelectorAll('tr').forEach(row => row.style.display = '');
+    }
+
+})
+
+const debounce = (fun, wait = 400) => {
+    let timer;
+    return () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fun();
+
+        }, wait)
+    }
+}
+
+const debouncedSearch = debounce(() => {
+    const searchKey = search.value.toLowerCase();
+    tableBody.querySelectorAll('tr').forEach(row => {
+        const cell = row.querySelector(':first-child');
+        if (cell.textContent.toLowerCase().includes(searchKey)) {
+            row.style.display = '';
+            return;
+        }
+        row.style.display = 'none';
+    })
+});
 
 document.getElementById('delete').addEventListener('click', function () {
     axios.delete(`http://localhost:3000/expenses/${expesneId}`, { headers: { Authorization: token } })
         .then(response => {
-            document.getElementById(expesneId).remove();
+            const tr = document.getElementById(expesneId);
+            const amount = tr.querySelector('td:nth-child(4)').textContent;
+            const value=amount.split(" ")[1];
+            expenseAmount.textContent = parseFloat(expenseAmount.textContent) - value;
+            tr.remove();
 
             bootstrap.Modal.getInstance(document.getElementById('target')).hide();
         })
