@@ -3,6 +3,8 @@ const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
 const dotenv=require('dotenv');
 
+const generateToken=require('../util/functions');
+
 dotenv.config();
 
 exports.postAdd = async (req, res, next) => {
@@ -43,7 +45,7 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({message:`User not authorized`})
         }
 
-        const token=await generateToken(user.id,user.name);
+        const token=await generateToken(user.id,user.name,null);
 
         return res.status(200).json({message:'USer logined Successfully',token});
     }
@@ -52,8 +54,3 @@ exports.login = async (req, res, next) => {
     }
 }
 
-async function generateToken(id,name){
-console.log(process.env.secretKey);
-
-    return jwt.sign({id,name},process.env.secretKey);
-}

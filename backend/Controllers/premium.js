@@ -1,9 +1,12 @@
 const razorpay = require('razorpay');
-
 const dotenv = require('dotenv');
 
 const User = require('../Models/User');
 const Order = require('../Models/Order');
+
+const generateToken=require('../util/functions');
+const Expense = require('../Models/Expense');
+const { Sequelize } = require('sequelize');
 
 dotenv.config();
 
@@ -26,7 +29,6 @@ exports.purchase = async (req, res, next) => {
             key_id: process.env.razorPayKey_id,
             key_secret: process.env.razorPayKey_secret
         })
-
         const user = await User.findByPk(req.userId);
         const amount = 2500;
 
@@ -67,11 +69,11 @@ exports.updatePayment = async (req, res, next) => {
                 order.update({ paymentId, status }),
                 user.update({ isPremium: true })
             ])
-
-            console.log(user);
+            const token=await generateToken(user.id,user.name,true);
             return res.json({
-                message: 'You are a premium member now'
-            })
+                message: 'You are a premium member now',
+                token
+            });
         }
         else {
             await order.update({paymentId,status});
@@ -88,3 +90,18 @@ exports.updatePayment = async (req, res, next) => {
 
 }
 
+exports.getLeaderboard=async(req,res,next)=>{
+    const leaderboard=await User.findAll({
+        include:[{
+            model:Expense,
+            attributes:[]
+        }],
+        attributes:[
+            'name',
+            [Sequelize.fn('SUM',Sequelize.col('expenses.amount')),'totalExpense']
+        ],
+        group:['User.id']
+    });
+
+    res.status(200).json(leaderboard);
+}
