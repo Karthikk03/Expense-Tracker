@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --green: #27ae60;
+    --light-color: #666;
+    --grey: #eee;
+    --blue: #3C91E6;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    height: 100vh;
+    /* margin:  0 50px; */
+    overflow: auto;
+    background: #eee;
+}
+
+.navbar-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+}
+
+
+.navbar {
+    display: flex;
+    align-items: center;
+    z-index: 100;
+    padding: 0 30px;
+    max-width: 90%;
+}
+
+.navbar-logo {
+    cursor: pointer;
+}
+
+.navbar-logo img {
+    width: 50px;
+    height: 100%;
+}
+
+.navbar-menu a {
+    color: var(--light-color);
+    padding: 5px 10px;
+    border-radius: 0.2rem;
+    text-decoration: none;
+}
+
+.navbar-menu a:hover {
+    color: #fff;
+    background: var(--green);
+}
+
+.navbar i {
+    color: var(--light-color);
+    padding: 0.5rem;
+}
+
+.navbar i:hover {
+    cursor: pointer;
+
+}
+
+
+#menu-bars {
+    display: none;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .7) !important;
+}
+
+.overlay-user {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    position: absolute;
+    background-color: #f9f9f9;
+    top: 52px;
+    padding: 20px;
+    border-radius: 10px;
+    right: 20px;
+    opacity: 1;
+}
+
+.overlay-user>div:first-child {
+    grid-column: 1/-1;
+    /* margin-right: auto; */
+}
+
+.overlay-user a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media screen and (max-width: 630px) {
+    #menu-bars {
+        display: inline-block;
+    }
+
+    .navbar-menu {
+        height: 100vh;
+        overflow-y: auto;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #FFFFFF;
+        transform: translateX(200%);
+        transition: transform 0.3s ease-in-out;
+        padding: 30px;
+    }
+
+    .navbar-menu.active {
+        transform: translateX(0);
+    }
+
+    .navbar-menu a {
+        display: block;
+        margin: 1rem 0;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .overlay-user {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

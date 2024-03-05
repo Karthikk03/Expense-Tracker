@@ -45,7 +45,7 @@ exports.login = async (req, res, next) => {
             return res.status(401).json({message:`User not authorized`})
         }
 
-        const token=await generateToken(user.id,user.name,null);
+        const token=await generateToken(user.id,user.name,user.isPremium);
 
         return res.status(200).json({message:'USer logined Successfully',token});
     }

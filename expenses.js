@@ -1,11 +1,15 @@
 const token = localStorage.getItem('token');
 let expesneId = null;
 const expenseAmount = document.querySelector('.te');
+const username=document.querySelector('.username');
 
 
 document.addEventListener("DOMContentLoaded", async () => {
     const response = await axios.get(`http://localhost:3000/expenses`, { headers: { 'Authorization': token } });
-    console.log(response)
+    const decodedTOken=parseJwt(token);
+
+    username.textContent=decodedTOken.name;
+
     response.data.expenses.forEach(item => {
         addRow(item);
     })
@@ -43,33 +47,7 @@ async function addExpense(e) {
 
 
 
-let menu = document.querySelector('#menu-bars');
-let navbar = document.querySelector('.navbar-menu');
 
-
-menu.onclick = () => {
-    menu.classList.toggle('fa-times');
-    navbar.classList.toggle('active');
-}
-
-function toggleOverlay() {
-    const overlay = document.querySelector('.overlay');
-    if (overlay.style.display === 'none' || overlay.style.display === '') {
-        overlay.style.display = 'block'; // Show the overlay
-    }
-}
-
-document.querySelector('.fa-user').addEventListener('click', function (event) {
-    event.stopPropagation();
-    toggleOverlay();
-});
-
-document.addEventListener('click', function (event) {
-    const overlay = document.querySelector('.overlay');
-    if (overlay.style.display === 'block') {
-        overlay.style.display = 'none';
-    }
-});
 
 const tableBody = document.getElementById('table-data');
 
@@ -163,7 +141,7 @@ document.getElementById('delete').addEventListener('click', function () {
         .then(response => {
             const tr = document.getElementById(expesneId);
             const amount = tr.querySelector('td:nth-child(4)').textContent;
-            const value=amount.split(" ")[1];
+            const value = amount.split(" ")[1];
             expenseAmount.textContent = parseFloat(expenseAmount.textContent) - value;
             tr.remove();
 
@@ -173,7 +151,3 @@ document.getElementById('delete').addEventListener('click', function () {
             console.log(error);
         });
 });
-
-
-
-

@@ -103,5 +103,7 @@ exports.getLeaderboard=async(req,res,next)=>{
         group:['User.id']
     });
 
+    leaderboard.sort((a,b)=>b.totalExpense-a.totalExpense)
+
     res.status(200).json(leaderboard);
 }

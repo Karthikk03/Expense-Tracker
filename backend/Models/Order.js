@@ -15,7 +15,7 @@ const Order=sequelize.define('order',{
     paymentId:{
         type:Sequelize.STRING,
     },
-    Status:{
+    status:{
         type:Sequelize.STRING,
     }
 })

@@ -11,9 +11,11 @@ app.use(bodyparser.json());
 const userRoutes=require('./routes/user');
 const expenseRoutes=require('./routes/expense');
 const premiumRoutes=require('./routes/premium');
+const forgotRoute=require('./routes/forgot');
 
 app.use('/user',userRoutes);
 app.use('/expenses',expenseRoutes);
+app.use('/password',forgotRoute);
 app.use(premiumRoutes);
 
 const User=require('./Models/User');
