@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const authorize = require('../Controllers/authorize');
-const forgotPassword = require('../Controllers/forgot');
+const passwordRoutes = require('../Controllers/forgot');
 
-router.post('/forgot', forgotPassword);
+router.post('/forgot', passwordRoutes.forgot);
+
+router.get('/resetpassword/:uuid',passwordRoutes.reset)
+
+router.post('/update/:uuid',passwordRoutes.update)
 
 module.exports = router;

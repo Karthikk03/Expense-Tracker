@@ -7,6 +7,7 @@ const cors=require('cors');
 
 app.use(cors());
 app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}));
 
 const userRoutes=require('./routes/user');
 const expenseRoutes=require('./routes/expense');
@@ -22,11 +23,16 @@ const User=require('./Models/User');
 const Expense=require('./Models/Expense');
 const Order=require('./Models/Order');
 
+const ForgotRequest=require('./Models/ForgotRequests');
+
 Expense.belongsTo(User);
 User.hasMany(Expense);
 
 Order.belongsTo(User);
 User.hasMany(Order);
+
+ForgotRequest.belongsTo(User);
+User.hasMany(ForgotRequest);
 
 (async () => {
     try {

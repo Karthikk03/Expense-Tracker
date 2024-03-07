@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="reset.css">
+</head>
+
+<body>
+    <div class="logo">
+        <img
+            src="https://www.concernaustralia.org.au/wp-content/uploads/2021/07/Featured-image-Income-and-Expenses-video-3.png">
+            <h1>Expense Tracker</h1>
+    </div>
+
+        <div class="main-container">
+            <div class="text-wrapper">
+                <p class="head">Please enter you mail to reset</h2>
+                <form id="form1">
+                    <label for="mail" class="input-label">Enter Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="mail" required>
+                    </div>
+                    <button type="submit" id="reset">Reset</button>
+                </form>
+                <p class="msg">Reset link has been sent to your mail</p>
+                <p class="login">Get back to login <a href="index.html">login</a></p>
+            </div>
+        </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="reset.js"></script>
+
+</html>
