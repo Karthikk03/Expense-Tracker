@@ -21,8 +21,8 @@
             </div>
             <div class="navbar-menu">
                 <a href="#">Dashboard</a>
-                <a href="#">Expense Report</a>
-                <a href="/Leaderboard.html">Leaderboard</a>
+                <a href="reports.html">Expense Report</a>
+                <a href="Leaderboard.html">Leaderboard</a>
             </div>
 
             <div class="navbar-user">
@@ -45,23 +45,30 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="expense-container d-flex justify-content-evenly flex-wrap">
+        <div class="expense-container">
             <div class="form-container">
                 <form class="d-flex flex-column align-items-center">
-                    <h2>Add Expense</h2>
+                    <h2>Add Transaction</h2>
+
                     <div class="form-inputs">
+                        <div class="form-input">
+                            <label for="type">Transaction Type:</label>
+                            <select id="type">
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                        </div>
+
                         <div class="form-input">
                             <label for="category">Category:</label>
                             <select id="category">
-                                <option value="Groceries">Groceries</option>
-                                <option value="Shopping">Shopping</option>
-                                <option value="Movies">Movies</option>
+
                             </select>
                         </div>
 
                         <div class="form-input">
                             <label for="money">Expense Amount:</label>
-                            <input type="number" id="money">
+                            <input type="number" id="money" >
                         </div>
 
                         <div class="form-input">
@@ -79,18 +86,37 @@
                 </form>
             </div>
 
-            <div class="total-expenses">
-                <i class="fas fa-inr icon"></i>
-                <span class="text">
-                    <h3><span class="te"></span> <i class="fas fa-inr"></i></h3>
-                    <p>Total Expenses</p>
-                </span>
-            </div>
+            <ul class="icons-info">
+                <li>
+                    <i class="fa-solid fa-wallet"></i>
+                    <span class="text">
+                        <h3 id="savings">1020</h3>
+                        <p>Savings</p>
+                    </span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-coins"></i>
+                    <span class="text">
+                        <h3 id="income">2834</h3>
+                        <p>Income</p>
+                    </span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-money-bill"></i>
+                    <span class="text">
+                        <h3 id="te">0</h3>
+                        <p>Total Expenses</p>
+                    </span>
+                </li>
+            </ul>
         </div>
 
+        <div class="select-option">
+            <span class="Expenses selected">Expenses</span>
+            <span class="Incomes">Incomes</s>
+        </div>
 
-
-        <div class="table-data">
+        <div class="table-data expense-table">
             <div class="head">
                 <h3>Recent Expenses</h3>
                 <input type="text" id="search">
@@ -108,7 +134,30 @@
                         <th>Expense Amount</th>
                     </tr>
                 </thead>
-                <tbody id="table-data">
+                <tbody id="expense-data">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-data income-table">
+            <div class="head">
+                <h3>Recent Incomes</h3>
+                <input type="text" id="search">
+                <div class="icons">
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-filter"></i>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Income Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="income-data">
                 </tbody>
             </table>
         </div>

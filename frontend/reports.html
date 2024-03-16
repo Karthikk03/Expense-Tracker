@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="reports.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="text-wrapper">
+            <p class="head">Get Reports</p>
+            <form id="dmy">
+                <div class="input-group">
+                    <label for="type">Get Expense by</label>
+                    <select id="type">
+                        <option value="date">Date</option>
+                        <option value="month">Month</option>
+                    </select>
+                </div>
+
+                <div class="date-input input-group">
+                    <label for="date">Select Date:</label>
+                    <input type="date" id="date">
+                </div>
+
+                <div class="month-input input-group">
+                    <label for="month">Select Month:</label>
+                    <input type="month" id="month">
+                </div>
+
+                <button id="getExpense">Get Expenses</button>
+            </form>
+
+        </div>
+
+        <div class="table-data">
+            <h2 id="report-date">13-03-2024</h2>
+            <h2 id="report-desc">Daily Report</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Income Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="expense-data">
+                </tbody>
+            </table>
+            <img src="https://ibellstore.com/images/no-item-found-here.png" alt="" id="img">
+        </div>
+
+        <div class="icon">
+            <a onclick="downloadFile()"><i class="fa-solid fa-download"></i></a>
+        </div>
+
+    </div>
+    
+    <div class="not-premium">
+        <h3 class="head">You can't access this feature</h3>
+        <p>Go to Leaderboard page to know further</p>
+        <a href="Leaderboard.html">Link</a>
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="reports.js"></script>
+
+</html>

@@ -1,4 +1,3 @@
-
 select,
 input[type="date"],
 input[type="text"],
@@ -11,19 +10,42 @@ input[type="number"] {
     margin: 4rem 0;
 }
 
+.select-option {
+    margin: 1.5rem 0;
+    text-align: center;
+
+}
+
+ .Incomes,
+.Expenses {
+    cursor: pointer;
+    background-color: #8c484833;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin-right: 20px;
+}
+
+.Incomes:hover,
+.Expenses:hover,
+.selected {
+    background-color: #dc443c;
+    color: white;
+}
+
+
 .form-container {
     background: #f9f9f9;
     border-radius: 10px;
     margin-bottom: 10px;
-    max-width: 1000px;
+    margin: 0 2rem;
+    margin-bottom: 1.5rem;
 }
 
 
 .form-inputs {
     display: grid;
-    grid-template-columns: repeat(3, minmax(149px, 1fr)) minmax(149px, 2fr);
+    grid-template-columns: repeat(4, minmax(149px, 1fr)) minmax(149px, 2fr);
     grid-gap: 15px;
-    /* Adjust based on your spacing preference */
     width: 100%;
     padding: 0 10px;
 }
@@ -36,7 +58,7 @@ input[type="number"] {
 
 form h2 {
     text-align: center;
-    margin: 10px 0;
+    margin: 20px 0;
     font-weight: 600;
     font-size: 24px;
     color: #695c70;
@@ -53,25 +75,35 @@ select {
 
 button {
     border-radius: 5px;
-    border: 1px solid rgb(255 113 105);
-    background-color: rgb(255 113 105);
-    color: #FFFFFF;
+    border: 2px solid #2f80ed;
+    color: #2f80ed;
     font-size: 12px;
     font-weight: bold;
     padding: 12px 0px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin: 10px auto;
+    margin: 1rem auto;
     width: 120px;
     display: block;
+}
+
+button:hover {
+    background-color: #2f80ed;
+    color: white;
 }
 
 select {
     font-size: 1rem;
 }
 
-.total-expenses {
-    padding: 20px;
+.icons-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-gap: 1.5rem;
+}
+
+.icons-info li {
+    padding: 1.5rem;
     background: #f9f9f9;
     border-radius: 20px;
     display: flex;
@@ -79,20 +111,39 @@ select {
     gap: 24px;
 }
 
-.icon {
+.icons-info li .fa-solid {
     width: 80px;
     height: 80px;
     border-radius: 10px;
     font-size: 36px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    color: #fd7238;
-    background: #ffe0d3;
-
+    justify-content: center;
 }
 
-#search{
+.icons-info li h3 {
+    font-size: 24px;
+    color: #342e37;
+    font-weight: 600;
+}
+
+.icons-info li:nth-child(1) .fa-solid {
+    background: #cfe8ff;
+    color: #3c91e6;
+}
+
+.icons-info li:nth-child(2) .fa-solid {
+    background: #bfe9d5;
+    color: #018749;
+}
+
+.icons-info li:nth-child(3) .fa-solid {
+    background: #dbbeff;
+    color: #7e56af;
+}
+
+
+#search {
     display: none;
     max-width: 50%;
 }
@@ -178,20 +229,46 @@ td .fas:hover {
     background: #27ae60;
 }
 
+.income-table{
+    display: none;
+}
+
 @media screen and (max-width: 630px) {
-    
+
     .table-data table td {
         padding-right: 10px;
 
     }
 
-    
+
+}
+
+@media screen and (max-width:950px) {
+    .form-inputs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .large{
+        grid-column: span 2;
+    }
+
+    .expense-container {
+        flex-direction: column;
+    }
+
+   
+
 }
 
 @media screen and (max-width:721px) {
     .form-inputs {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
+    }
+
+    .large{
+        grid-column: span 1;
     }
 
     .expense-container {
@@ -212,7 +289,7 @@ td .fas:hover {
         margin: 0 auto;
     }
 
-    .overlay-user{
-        grid-template-columns: repeat(1,1fr);
+    .overlay-user {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
