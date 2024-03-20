@@ -88,7 +88,7 @@ select {
     font-size: 1rem;
 }
 
-button {
+.text-wrapper button {
     width: 100%;
     background-color: #2666be;
     border: 1px solid #2666be;
@@ -142,7 +142,7 @@ button {
 
 .table-data table td {
     padding: 16px 0;
-    white-space: nowrap;
+    white-space: wrap;
 }
 
 .table-data table tbody tr:hover {
@@ -168,9 +168,9 @@ table th:first-child,table td:first-child{
 .fa-solid{
     /* display: none; */
     cursor: pointer;
-    position: absolute;
-    right:5%;
-    bottom:5%;
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
     background-color: #dc443c;
     border-radius: 50%;
     padding: 0.8rem;
@@ -184,9 +184,41 @@ table th:first-child,table td:first-child{
     display: none;
 }
 
+.page-numbers{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.page-numbers button{
+    padding: 4px 8px;
+    border:1px solid white;
+    border-radius: 50%;
+}
+.page-numbers button:hover{
+    background-color: #dbc6c6;
+}
+
+.page-numbers button.active{
+    background-color:#b00;
+    color: white;
+}
 
 @media screen and (max-width:800px) {
     .text-wrapper {
         width: 70%;
     }
+}
+
+@media screen and (max-width:500px) {
+    .table-data{
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    .table-data table td,th {
+        padding: 16px 8px;
+        white-space: wrap;
+    }
+
 }
