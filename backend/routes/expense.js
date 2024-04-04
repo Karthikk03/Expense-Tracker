@@ -10,4 +10,5 @@ router.get('/',authorize,expenseController.getExpenses);
 
 router.delete('/:id',authorize,expenseController.delete);
 
+router.patch('/edit-expense/:id',authorize,expenseController.update);
 module.exports=router;

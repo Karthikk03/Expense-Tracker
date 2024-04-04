@@ -20,6 +20,11 @@ const User=sequelize.define('user',{
         type:Sequelize.STRING,
         allowNull:false
     },
+    expenseCount:{
+        type:Sequelize.INTEGER,
+        allowNull:false,
+        defaultValue:0
+    },
     totalExpense:{
         type:Sequelize.INTEGER,
         allowNull:false

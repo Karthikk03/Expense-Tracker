@@ -41,10 +41,10 @@ exports.getReports = async (req, res, next) => {
         const user = await User.findByPk(req.userId);
         if (!user) res.status(404).json({ error: "User not found" });
 
-        // if (user.isPremium !== true) return res.status(403).json({ error: "Access to the requested resource is forbidden for non-premium users." });
+        if (user.isPremium !== true) return res.status(403).json({ error: "Access to the requested resource is forbidden for non-premium users." });
 
-        const start = (page_no - 1) * 10 ||0;
-        let whereClause={};
+        const start = (page_no - 1) * 10 || 0;
+        let whereClause = {};
 
         if (date) {
             whereClause.date = date;
@@ -61,22 +61,28 @@ exports.getReports = async (req, res, next) => {
             }
         }
 
+        const count = await user.countExpenses({ where: whereClause });
+        const lastPage = Math.ceil(count / 10);
+
         const expenses = await user.getExpenses({
             where: whereClause,
             offset: start,
             limit: 10
         })
 
-        const response={
+        const totalExpenses = await Expense.sum('amount', {
+            where: {
+                ...whereClause,
+                userId: user.id,
+            }
+        })
+
+
+        const response = {
             expenses,
-            current:parseInt(page_no)||1
-        }
-        
-        if(!page_no){
-            const count=await user.countExpenses({
-                where:whereClause
-            })
-            response.lastPage=Math.ceil(count/10);
+            current: parseInt(page_no) || 1,
+            totalExpenses,
+            lastPage
         }
 
         return res.json(response);

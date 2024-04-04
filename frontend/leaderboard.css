@@ -1,16 +1,16 @@
-body{
-    background-color: rgba(0,0,0,0.5);
+body {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .main-container {
     margin: 4rem 0;
 }
 
-.not-premium{
+.not-premium {
     background: #006A4E;
-    color:white;
-    width:90%;
-    max-width:640px;
+    color: white;
+    width: 90%;
+    max-width: 640px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -22,37 +22,38 @@ body{
     display: none;
 }
 
-#price{
-    font-size:3rem;
+#price {
+    font-size: 3rem;
 }
 
-.not-premium img{
-    width:200px;
+.not-premium img {
+    width: 200px;
 }
 
 
 
-ul{
+ul {
     list-style: none;
     line-height: 3rem;
     padding: 0;
     align-self: flex-start;
-    
+
 }
 
-.not-premium button{
+.not-premium button {
     align-self: flex-start;
     background-color: rgba(159, 189, 159, 0.5);
     width: 104px;
     padding: 10px 10px;
-    border:1px solid rgba(159, 189, 159,0.5);
+    border: 1px solid rgba(159, 189, 159, 0.5);
     border-radius: 8px;
     font-weight: bolder;
     color: white;
     margin: 10px 0;
 }
 
-ul,.not-premium button{
+ul,
+.not-premium button {
     margin-left: calc((100% - 75%) / 2);
 }
 
@@ -93,10 +94,11 @@ ul,.not-premium button{
     width: 20%;
 }
 
-.current{
+.current {
     background-color: #e0d9d9;
 }
 
-table th:first-child,table td:first-child{
+table th:first-child,
+table td:first-child {
     padding-left: 12px;
 }

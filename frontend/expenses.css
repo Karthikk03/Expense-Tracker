@@ -10,41 +10,23 @@ input[type="number"] {
     margin: 4rem 0;
 }
 
-.select-option {
-    margin: 1.5rem 0;
-    text-align: center;
-
+.expense-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
-
- .Incomes,
-.Expenses {
-    cursor: pointer;
-    background-color: #8c484833;
-    border-radius: 20px;
-    padding: 5px 10px;
-    margin-right: 20px;
-}
-
-.Incomes:hover,
-.Expenses:hover,
-.selected {
-    background-color: #dc443c;
-    color: white;
-}
-
 
 .form-container {
     background: #f9f9f9;
     border-radius: 10px;
-    margin-bottom: 10px;
-    margin: 0 2rem;
+    margin: 0 1rem;
     margin-bottom: 1.5rem;
 }
 
 
 .form-inputs {
     display: grid;
-    grid-template-columns: repeat(4, minmax(149px, 1fr)) minmax(149px, 2fr);
+    grid-template-columns: repeat(3, minmax(149px, 1fr)) minmax(149px, 2fr);
     grid-gap: 15px;
     width: 100%;
     padding: 0 10px;
@@ -73,7 +55,7 @@ select {
     width: 100%;
 }
 
-button {
+#fs {
     border-radius: 5px;
     border: 2px solid #2f80ed;
     color: #2f80ed;
@@ -84,26 +66,15 @@ button {
     text-transform: uppercase;
     margin: 1rem auto;
     width: 120px;
-    display: block;
 }
 
-button:hover {
+#fs:hover {
     background-color: #2f80ed;
     color: white;
 }
 
-select {
-    font-size: 1rem;
-}
-
-.icons-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    grid-gap: 1.5rem;
-}
-
-.icons-info li {
-    padding: 1.5rem;
+.total-expenses {
+    padding: 20px;
     background: #f9f9f9;
     border-radius: 20px;
     display: flex;
@@ -111,7 +82,7 @@ select {
     gap: 24px;
 }
 
-.icons-info li .fa-solid {
+.icon {
     width: 80px;
     height: 80px;
     border-radius: 10px;
@@ -119,27 +90,14 @@ select {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.icons-info li h3 {
-    font-size: 24px;
-    color: #342e37;
-    font-weight: 600;
-}
-
-.icons-info li:nth-child(1) .fa-solid {
-    background: #cfe8ff;
-    color: #3c91e6;
-}
-
-.icons-info li:nth-child(2) .fa-solid {
     background: #bfe9d5;
     color: #018749;
 }
 
-.icons-info li:nth-child(3) .fa-solid {
-    background: #dbbeff;
-    color: #7e56af;
+.icons-info h3 {
+    font-size: 24px;
+    color: #342e37;
+    font-weight: 600;
 }
 
 
@@ -148,11 +106,6 @@ select {
     max-width: 50%;
 }
 
-.text h3 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #342e37;
-}
 
 .table-data {
     padding: 24px;
@@ -170,10 +123,6 @@ select {
 
 .table-data .head {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
 }
 
 .table-data .head h3 {
@@ -194,6 +143,10 @@ select {
 
 .table-data table td {
     padding: 16px 0;
+    /* white-space: nowrap; */
+}
+
+.table-data table td:nth-child(3){
     white-space: nowrap;
 }
 
@@ -229,57 +182,63 @@ td .fas:hover {
     background: #27ae60;
 }
 
-.income-table{
-    display: none;
-}
 
 @media screen and (max-width: 630px) {
+    #menu-bars {
+        display: inline-block;
+    }
 
     .table-data table td {
         padding-right: 10px;
 
     }
 
+    .navbar{
+        max-width: 100%;
+    }
 
+    .navbar-menu {
+        height: 100vh;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #FFFFFF;
+        transform: translateX(200%);
+        transition: transform 0.3s ease-in-out;
+        padding: 30px;
+    }
+
+    .navbar-menu.active {
+        transform: translateX(0);
+    }
+
+    .navbar-menu a {
+        display: block;
+        margin: 1rem 0;
+    }
 }
 
-@media screen and (max-width:950px) {
-    .form-inputs {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .large{
-        grid-column: span 2;
-    }
+@media screen and (max-width:721px) {
 
     .expense-container {
         flex-direction: column;
     }
 
-   
+    .form-container{
+        width: 90%;
+    }
 
-}
+    form {
+        max-width: 70vw;
+        margin: 0 auto;
+    }
 
-@media screen and (max-width:721px) {
     .form-inputs {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
     }
-
-    .large{
-        grid-column: span 1;
-    }
-
-    .expense-container {
-        flex-direction: column;
-    }
-
-    form {
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
 }
 
 

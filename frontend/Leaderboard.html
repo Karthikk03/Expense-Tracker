@@ -20,9 +20,9 @@
                     src="https://www.concernaustralia.org.au/wp-content/uploads/2021/07/Featured-image-Income-and-Expenses-video-3.png">
             </div>
             <div class="navbar-menu">
-                <a href="#">Dashboard</a>
-                <a href="#">Expense Report</a>
-                <a href="/Leaderboard.html">Leaderboard</a>
+                <a href="expenses.html">Dashboard</a>
+                <a href="reports.html">Expense Report</a>
+                <a class="active">Leaderboard</a>
             </div>
 
             <div class="navbar-user">
@@ -37,7 +37,6 @@
         <div class="overlay-backdrop">
             <div class="overlay-user">
                 <div class="username">Karthik K</div>
-                <a href="#">My Account</a>
                 <a href="#" style="color: red;"><i class="fa fa-sign-out" aria-hidden="true"></i>
                     Logout</a>
             </div>
@@ -51,7 +50,7 @@
             <h4>Be a premium member to get access this feature</h4>
             <img src="images/OH_no__egg__Puffy_puffpuff-removebg-preview.png" alt="">
             <hr>
-            <p id="price">$25</p>
+            <p id="price"><i class="fas fa-inr"></i> 25</p>
 
             <ul>
                 <h4>Perks</h4>
@@ -63,16 +62,19 @@
 
         <div class="table-data">
             <table>
-            <thead>
-                <tr>
-                    <th>S.No</th>
-                    <th>Username</th>
-                    <th>Total Expenses</th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-            </tbody>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Username</th>
+                        <th>Total Expenses</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
             </table>
+            
+            <div class="page-numbers"></div>
+
         </div>
     </div>
 

@@ -30,11 +30,12 @@ p {
     font-weight: 100;
     line-height: 20px;
     letter-spacing: 0.5px;
-    margin: 20px 0 30px;
+    margin: 20px 0;
 }
 
 span {
-    font-size: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 a {
@@ -60,10 +61,6 @@ button {
 
 button:active {
     transform: scale(0.95);
-}
-
-button:focus {
-    outline: none;
 }
 
 button.ghost {
@@ -109,8 +106,8 @@ input {
     transition: all 0.6s ease-in-out;
 }
 
-p.existing,p.noUser{
-    margin:10px 30px;
+p.existing,p.noUser,p.invalid{
+    margin:0;
 
 }
 

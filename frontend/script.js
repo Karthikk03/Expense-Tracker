@@ -8,7 +8,7 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-let menu = document.querySelector('#menu-bars');
+const menu = document.querySelector('#menu-bars');
 let navbar = document.querySelector('.navbar-menu');
 
 
@@ -25,13 +25,57 @@ function toggleOverlay() {
 }
 
 document.querySelector('.fa-user').addEventListener('click', function (event) {
-    event.stopPropagation();
     toggleOverlay();
+    event.stopPropagation();
 });
+
+const overUser = document.querySelector('.overlay-user');
 
 document.addEventListener('click', function (event) {
     const overlay = document.querySelector('.overlay');
-    if (overlay.style.display === 'block') {
+    if (!overUser.contains(event.target) && overlay.style.display === 'block') {
         overlay.style.display = 'none';
     }
 });
+
+const pages = document.querySelector('.page-numbers')
+
+pages.addEventListener('click', updateTableData);
+
+async function updateTableData(e) {
+    tableBody.innerHTML = ``;
+    let page_no = e.target.textContent;
+    let queryParam = `?page_no=${page_no}`;
+
+    const response = await axios.get(`${baseUrl}/${queryParam}`, { headers: { 'Authorization': token } });
+
+    updateData(response.data);
+
+    
+}
+
+const createButton = (pageNumber,current) => {
+    const button = document.createElement('button');
+    button.textContent = pageNumber;
+    button.classList.add('page-number');
+
+    if (pageNumber == current) button.classList.add('active');
+
+    pages.appendChild(button);
+}
+
+function Pagination(data) {
+    pages.innerHTML = ``;
+
+    if (data.current > 1) createButton(1);
+    if (data.current > 2) createButton(data.current - 1);
+
+    createButton(data.current,data.current);
+
+    if (data.current < data.lastPage - 1) createButton(data.current + 1);
+    if (data.lastPage > data.current) {
+        createButton(data.lastPage);
+    }
+
+   
+}

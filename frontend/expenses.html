@@ -20,15 +20,14 @@
                     src="https://www.concernaustralia.org.au/wp-content/uploads/2021/07/Featured-image-Income-and-Expenses-video-3.png">
             </div>
             <div class="navbar-menu">
-                <a href="#">Dashboard</a>
+                <a href="#" class="active">Dashboard</a>
                 <a href="reports.html">Expense Report</a>
                 <a href="Leaderboard.html">Leaderboard</a>
             </div>
 
             <div class="navbar-user">
                 <i id="menu-bars" class="fas fa-bars"></i>
-                <a><i class="fa-solid fa-user" onclick=""></i></a>
-
+                <i class="fa-solid fa-user"></i>
             </div>
         </div>
     </div>
@@ -37,38 +36,31 @@
         <div class="overlay-backdrop">
             <div class="overlay-user">
                 <div class="username">Karthik K</div>
-                <a href="#">My Account</a>
+                <!-- <a href="#">My Account</a> -->
                 <a href="#" style="color: red;"><i class="fa fa-sign-out" aria-hidden="true"></i>
                     Logout</a>
             </div>
-
         </div>
     </div>
+
     <div class="container-fluid">
-        <div class="expense-container">
+        <div class="expense-container d-flex justify-content-evenly flex-wrap">
             <div class="form-container">
                 <form class="d-flex flex-column align-items-center">
-                    <h2>Add Transaction</h2>
-
+                    <h2>Add Expense</h2>
                     <div class="form-inputs">
-                        <div class="form-input">
-                            <label for="type">Transaction Type:</label>
-                            <select id="type">
-                                <option value="expense">Expense</option>
-                                <option value="income">Income</option>
-                            </select>
-                        </div>
-
                         <div class="form-input">
                             <label for="category">Category:</label>
                             <select id="category">
-
+                                <option value="Groceries">Groceries</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Movies">Movies</option>
                             </select>
                         </div>
 
                         <div class="form-input">
                             <label for="money">Expense Amount:</label>
-                            <input type="number" id="money" >
+                            <input type="number" id="money">
                         </div>
 
                         <div class="form-input">
@@ -82,49 +74,26 @@
                         </div>
                     </div>
 
-                    <button type="submit">Submit</button>
+                    <button type="submit" id="fs">Submit</button>
                 </form>
             </div>
 
-            <ul class="icons-info">
-                <li>
-                    <i class="fa-solid fa-wallet"></i>
-                    <span class="text">
-                        <h3 id="savings">1020</h3>
-                        <p>Savings</p>
-                    </span>
-                </li>
-                <li>
-                    <i class="fa-solid fa-coins"></i>
-                    <span class="text">
-                        <h3 id="income">2834</h3>
-                        <p>Income</p>
-                    </span>
-                </li>
-                <li>
-                    <i class="fa-solid fa-money-bill"></i>
-                    <span class="text">
-                        <h3 id="te">0</h3>
-                        <p>Total Expenses</p>
-                    </span>
-                </li>
-            </ul>
+            <div class="total-expenses">
+                <i class="fas fa-inr icon"></i>
+                <span class="icons-info">
+                    <h3 id="te"></h3>
+                    <p>Total Expenses</p>
+                </span>
+            </div>
         </div>
 
-        <div class="select-option">
-            <span class="Expenses selected">Expenses</span>
-            <span class="Incomes">Incomes</s>
-        </div>
 
-        <div class="table-data expense-table">
+
+        <div class="table-data">
             <div class="head">
                 <h3>Recent Expenses</h3>
-                <input type="text" id="search">
-                <div class="icons">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-filter"></i>
-                </div>
             </div>
+
             <table>
                 <thead>
                     <tr>
@@ -134,32 +103,13 @@
                         <th>Expense Amount</th>
                     </tr>
                 </thead>
-                <tbody id="expense-data">
-                </tbody>
+                <tbody id="table-body">
+                <tbody>
             </table>
-        </div>
 
-        <div class="table-data income-table">
-            <div class="head">
-                <h3>Recent Incomes</h3>
-                <input type="text" id="search">
-                <div class="icons">
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-filter"></i>
-                </div>
+            <div class="page-numbers">
+                
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Date</th>
-                        <th>Income Amount</th>
-                    </tr>
-                </thead>
-                <tbody id="income-data">
-                </tbody>
-            </table>
         </div>
         <div class="modal fade" id="target" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -177,6 +127,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

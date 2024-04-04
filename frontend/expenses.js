@@ -3,134 +3,107 @@ let expesneId = null;
 const expenseAmount = document.querySelector('#te');
 const username = document.querySelector('.username');
 
-const expenseBody = document.getElementById('expense-data');
-const incomeBody = document.getElementById('income-data');
+let current, lastPage;
+
+let edit, initialState;
+
+const baseUrl = 'http://localhost:3000/expenses';
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const response = await axios.get(`http://localhost:3000/expenses`, { headers: { 'Authorization': token } });
-    console.log(response)
-    const decodedTOken = parseJwt(token);
+    const response = await axios.get(`http://localhost:3000/expenses?page_no=1`, { headers: { 'Authorization': token } });
 
+    const decodedTOken = parseJwt(token);
     username.textContent = decodedTOken.name;
 
     response.data.expenses.forEach(item => {
-        addRow(item,expenseBody);
+        addRow(item);
     })
     expenseAmount.textContent = response.data.totalExpense;
 
-
-
-    const event = new Event('change', {
-        'bubbles': true,
-        'cancelable': true
-    })
-
-    document.getElementById('type').dispatchEvent(event);
+    updatePages(response.data);
 
 })
 
-
-function addOption(values, selectedOption) {
-
-    const options = selectedOption.options;
-    for (let i = options.length - 1; i >= 0; i--) {
-        selectedOption.remove(i);
-    }
-
-    values.forEach(function (value) {
-        var option = new Option(value, value);
-        selectedOption.add(option);
-    });
-}
-document.querySelector('#type').addEventListener('change', (e) => {
-    const type = e.target.value;
-
-    const category = document.querySelector('#category');
-    let values;
-
-    if (type === 'income') {
-        values = ['Salary', 'Investment', 'Bonus'];
-
-        addOption(values, category);
-
-        return;
-    }
-
-    values = ['Shopping', 'Movies', 'Fitness', 'EMI', 'Travel', 'Drinks'];
-    addOption(values, category);
-
-
-})
 let form = document.getElementsByTagName('form')[0];
 
-form.addEventListener('submit', addTransaction);
+form.addEventListener('submit', addExpense);
 
-async function addTransaction(e) {
+async function addExpense(e) {
     e.preventDefault();
 
-    const type = document.querySelector('#type').value;
     const category = document.getElementById('category').value;
     const amount = document.getElementById('money').valueAsNumber;
     const date = document.getElementById('date').value;
     const description = document.getElementById('desc').value;
 
-    const transactionData = {
+    const expenseData = {
         category,
         amount,
         date,
         description
     };
 
-    if (type === 'expense') {
-        const response = await axios.post(`http://localhost:3000/expenses/add-expense`, transactionData, { headers: { 'Authorization': token } });
-        // expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
-        form.reset();
+    if (edit === true) {
+        const b = initialState.category !== category || initialState.amount !== amount || initialState.date !== date || initialState.description !== description;
+        if (!b) {
+            const p = document.createElement('p');
+            p.textContent = 'Please update fields to edit expense';
+            form.appendChild(p);
+            setTimeout(() => {
+                form.removeChild(p);
+            }, 3000)
+            return;
 
-        return addRow(response.data,expenseBody);
+        }
+
+        try {
+
+            const response = await axios.patch(`http://localhost:3000/expenses/edit-expense/${expesneId}`, expenseData, { headers: { 'Authorization': token } });
+            updateRow(response.data);
+
+
+        }
+        catch (e) {
+            const p = document.createElement('p');
+            p.textContent = 'An error occurred while processing the expense';
+            form.appendChild(p);
+            setTimeout(() => {
+                form.removeChild(p);
+            }, 3000)
+        }
+        edit = false;
+        return;
     }
 
-    const response = await axios.post(`http://localhost:3000/incomes/add-income`, transactionData, { headers: { 'Authorization': token } });
-        // expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
-        form.reset();
 
-        return addRow(response.data,incomeBody);
-
+    const response = await axios.post(`http://localhost:3000/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
+    expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
+    form.reset();
 
 
+    addRow(response.data.newOne);
+
+    if (current >= lastPage - 1 && response.data.lastPage > lastPage) {
+        createButton(response.data.lastPage);
+        lastPage = response.data.lastPage;
+    }
+    else if (response.data.lastPage > lastPage) {
+        lastPage = response.data.lastPage;
+        pages.lastElementChild.textContent = lastPage;
+    }
 }
 
-function toggleClass(a, b) {
-    a.style.display = 'flex';
-    b.style.display = 'none';
-}
+const tableBody = document.getElementById('table-body');
 
-let selected = 'Expenses';
-const expenseTable = document.querySelector('.expense-table');
-const incomeTable = document.querySelector('.income-table');
-
-const select = document.querySelector('.select-option');
-
-select.addEventListener('click', (e) => {
-    if (selected === e.target.textContent) return;
-    e.target.classList.add('selected');
-    document.querySelector(`.${selected}`).classList.remove('selected');
-
-    selected = e.target.textContent;
-
-    if (selected === 'Expenses') return toggleClass(expenseTable, incomeTable);
-
-    toggleClass(incomeTable, expenseTable)
-})
-
-
-
-function addRow(transaction,tableBody) {
-    const { category, amount, date, description } = transaction;
-
-
+function addRow(expense) {
+    const rows = tableBody.rows.length;
+    if (rows > 5) {
+        return;
+    }
+    const { category, amount, date, description } = expense;
 
     const newRow = document.createElement('tr');
-    newRow.setAttribute('id', transaction.id);
+    newRow.setAttribute('id', `expense-${expense.id}`);
 
     const descCell = document.createElement('td');
 
@@ -144,6 +117,8 @@ function addRow(transaction,tableBody) {
     actionCell.innerHTML = '<i class="fas fa-edit"></i> <i class="fas fa-trash-alt" data-bs-toggle="modal" data-bs-target="#target"></i> ';
 
     descCell.textContent = description;
+
+
     dateCell.textContent = date;
     amountCell.textContent = '$ ' + amount;
     categoryCell.textContent = category;
@@ -161,66 +136,107 @@ function addRow(transaction,tableBody) {
     tableBody.appendChild(newRow);
 
     actionCell.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('fa-trash-alt')) {
-            expesneId = e.target.closest('tr').getAttribute('id');
-        }
+        expesneId = e.target.closest('tr').getAttribute('id').split('-')[1];
 
+        if (e.target.classList.contains('fa-edit')) editExpense(expesneId);
     })
 
 
 }
 
-const search = document.getElementById('search');
 
+function updateRow(updatedExpense) {
+    const row = tableBody.querySelector(`#expense-${expesneId}`);
 
-document.querySelector('.fa-search').addEventListener('click', (e) => {
-    search.style.display = (search.style.display === 'block') ? 'none' : 'block';
-    if (search.style.display === 'block') {
-        search.focus();
-        search.addEventListener('keyup', debouncedSearch);
-    }
-    else if (search.value !== '') {
-        search.value = '';
-        tableBody.querySelectorAll('tr').forEach(row => row.style.display = '');
-    }
+    row.cells[0].textContent = updatedExpense.description;
+    row.cells[1].textContent = updatedExpense.category;
 
-})
+    row.cells[2].textContent = updatedExpense.date;
 
-const debounce = (fun, wait = 400) => {
-    let timer;
-    return () => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            fun();
-
-        }, wait)
-    }
+    row.cells[3].textContent = `$ ${updatedExpense.amount}`;
 }
 
-const debouncedSearch = debounce(() => {
-    const searchKey = search.value.toLowerCase();
-    tableBody.querySelectorAll('tr').forEach(row => {
-        const cell = row.querySelector(':first-child');
-        if (cell.textContent.toLowerCase().includes(searchKey)) {
-            row.style.display = '';
-            return;
-        }
-        row.style.display = 'none';
-    })
-});
+function updateForm() {
+    document.getElementById('category').value = initialState.category;
+    document.getElementById('money').value = initialState.amount;
+    document.getElementById('date').value = initialState.date;
+    document.getElementById('desc').value = initialState.description;
+
+}
+
+function editExpense(expenseId) {
+    const expense = tableBody.querySelector(`#expense-${expenseId}`);
+
+    initialState = {
+        description: expense.querySelector('td:nth-child(1)').textContent,
+        category: expense.querySelector('td:nth-child(2)').textContent,
+        date: expense.querySelector('td:nth-child(3)').textContent,
+        amount: parseInt(expense.querySelector('td:nth-child(4)').textContent.split(' ')[1])
+    }
+
+
+    updateForm();
+
+    edit = true;
+}
+
+
+function updatePages(data) {
+    Pagination(data);
+    lastPage = data.lastPage;
+    current = data.current;
+}
+
+function triggerPreviousButton() {
+    if (current < lastPage) {
+        const button = pages.querySelector('.active');
+        button.click();
+    }
+
+    else if (current > 1) {
+        const previous = pages.querySelector('.active').previousElementSibling;
+        previous.click();
+    }
+    else {
+        tableBody.innerHTML = ``;
+    }
+}
 
 document.getElementById('delete').addEventListener('click', function () {
     axios.delete(`http://localhost:3000/expenses/${expesneId}`, { headers: { Authorization: token } })
         .then(response => {
-            const tr = document.getElementById(expesneId);
+            const tr = document.getElementById(`expense-${expesneId}`);
             const amount = tr.querySelector('td:nth-child(4)').textContent;
             const value = amount.split(" ")[1];
             expenseAmount.textContent = parseFloat(expenseAmount.textContent) - value;
             tr.remove();
 
             bootstrap.Modal.getInstance(document.getElementById('target')).hide();
+
+            const rows = tableBody.rows.length;
+            if (rows == 0) {
+                triggerPreviousButton();
+            }
         })
         .catch(error => {
             console.log(error);
         });
 });
+
+function updateData(data) {
+
+
+    current = data.current;
+
+    if (data.expenses.length === 0) {
+        return;
+    }
+
+
+    data.expenses.forEach((item) => {
+        addRow(item);
+    })
+
+    Pagination(data);
+
+}

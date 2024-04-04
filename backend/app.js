@@ -2,10 +2,22 @@ const express=require('express');
 const bodyparser=require('body-parser');
 const sequelize=require('./util/database');
 
+const fs = require('fs');
+const path = require('path')
+
 const app=express();
 const cors=require('cors');
 
+const helmet=require('helmet');
+const morgan=require('morgan');
+
+const accessLogStream=fs.createWriteStream(
+    path.join(__dirname,'access.log'),
+    {flags:'a'}
+)
 app.use(cors());
+app.use(helmet());
+app.use(morgan('combined',{stream:accessLogStream}));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
 

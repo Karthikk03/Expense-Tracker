@@ -9,21 +9,22 @@ loginForm.addEventListener('submit', loginUser);
 const mail = document.getElementById('mail');
 const pass = document.getElementById('pass');
 
+let prevMail, prevPass;
 
 async function loginUser(e) {
-	const existingError = document.querySelector('.noUser');
-	if (existingError) existingError.remove();
-
 	e.preventDefault();
+	if (mail.value === prevMail && pass.value === prevPass) return;
 
 	try {
-		const response =await axios.post(`http://localhost:3000/user/login`, { email: mail.value, password: pass.value });
+		prevMail = mail.value;
+		prevPass = pass.value;
+		const response = await axios.post(`http://localhost:3000/user/login`, { email: mail.value, password: pass.value });
 		console.log(response.data)
-		localStorage.setItem('token',response.data.token);
+		localStorage.setItem('token', response.data.token);
 		mail.value = '';
 		pass.value = '';
-		
-		window.location.href='expenses.html';
+
+		window.location.href = 'expenses.html';
 	}
 	catch (e) {
 		const invalid = document.querySelector('.invalid');

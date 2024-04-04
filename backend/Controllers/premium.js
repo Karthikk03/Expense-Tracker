@@ -4,22 +4,22 @@ const dotenv = require('dotenv');
 const User = require('../Models/User');
 const Order = require('../Models/Order');
 
-const generateToken=require('../util/functions');
+const generateToken = require('../util/functions');
 const Expense = require('../Models/Expense');
 const { Sequelize } = require('sequelize');
 
 dotenv.config();
 
-exports.checkPremium=async(req,res,next)=>{
-    try{
+exports.checkPremium = async (req, res, next) => {
+    try {
 
         const user = await User.findByPk(req.userId);
-        if(user.isPremium)return res.json(true);
+        if (user.isPremium) return res.json(true);
 
         res.json(false);
     }
-    catch(e){
-        return res.status(500).json({message:'Some internal issue'})
+    catch (e) {
+        return res.status(500).json({ message: 'Some internal issue' })
     }
 }
 
@@ -69,14 +69,14 @@ exports.updatePayment = async (req, res, next) => {
                 order.update({ paymentId, status }),
                 user.update({ isPremium: true })
             ])
-            const token=await generateToken(user.id,user.name,true);
+            const token = await generateToken(user.id, user.name, true);
             return res.json({
                 message: 'You are a premium member now',
                 token
             });
         }
         else {
-            await order.update({paymentId,status});
+            await order.update({ paymentId, status });
             res.json({ message: 'Try again,Your payment failed' })
         }
 
@@ -90,20 +90,65 @@ exports.updatePayment = async (req, res, next) => {
 
 }
 
-exports.getLeaderboard=async(req,res,next)=>{
-    const leaderboard=await User.findAll({
-        include:[{
-            model:Expense,
-            attributes:[]
-        }],
-        attributes:[
-            'name',
-            [Sequelize.fn('SUM',Sequelize.col('expenses.amount')),'totalExpense']
-        ],
-        group:['User.id']
-    });
+exports.getLeaderboard = async (req, res, next) => {
+    try {
 
-    leaderboard.sort((a,b)=>b.totalExpense-a.totalExpense)
+        console.log(1)
+        const user = await User.findByPk(req.userId);
+        if (!user) return res.status(404).json('User not found');
 
-    res.status(200).json(leaderboard);
+        const pageSize = 14;
+        const page_no = parseInt(req.query.page_no) || 1;
+        const offset = (page_no - 1) * pageSize;
+
+        const [leaderboard, total] = await Promise.all([
+            User.findAll({
+                order: [['totalExpense', 'DESC']],
+                offset,
+                limit: pageSize
+            }),
+            User.count()
+        ]);
+
+        let userRank = leaderboard.findIndex(item => item.id === user.id) + 1 + offset;
+
+        if (userRank == offset) {
+            const usersAhead = await User.count({
+                where: {
+                    totalExpense: {
+                        [Sequelize.Op.gt]: user.totalExpense
+                    }
+                }
+            });
+            userRank = usersAhead + 1;
+        }
+
+        leaderboard.forEach((current,index) => {
+            current.dataValues.rank=index+1+offset
+        });
+
+        if (userRank > pageSize + offset) {
+            const length = leaderboard.length;
+
+            user.dataValues.rank=userRank;
+
+            if (length == pageSize) leaderboard[length - 1] = user;
+
+            else leaderboard.push(user);
+        }
+
+        const lastPage = Math.ceil(total / 14);
+
+        const response = {
+            leaderboard,
+            userRank,
+            current:page_no,
+            lastPage
+        }
+        return res.status(200).json(response);
+    }
+    catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
 }

@@ -1,18 +1,32 @@
 const notPremium = document.querySelector('.not-premium');
 let value;
-let lastPage;
+
+let tdate = document.querySelector('#report-date');
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split('T')[0];
+    const currentDate = new Date().toISOString();
+    const formattedDate = currentDate.split('T')[0];
+    tdate.textContent = formattedDate;
     try {
         const response = await axios.get(`http://localhost:3000/reports/?date=${formattedDate}`, { headers: { 'Authorization': token } });
-        response.data.expenses.forEach(item => {
+
+        const { expenses, totalExpenses } = response.data;
+
+        expenses.forEach(item => {
             addRow(item);
         })
-        value = formattedDate;
+
+
+        if (expenses.length === 0) {
+            pages.innerHTML = ``;
+            icon.style.display='none'
+            return;
+        }
+        addFoot(totalExpenses)
+
+
+        
         showPages(response.data);
-        lastPage = response.data.lastPage;
     }
 
     catch (e) {
@@ -51,6 +65,7 @@ function getMonth(dateString) {
 }
 
 const tableBody = document.getElementById('expense-data');
+const tfoot = document.getElementById('foot');
 const icon = document.querySelector('.fa-solid');
 const img = document.querySelector('#img');
 
@@ -60,7 +75,9 @@ form.addEventListener('submit', async (e) => {
     if (selected === month) queryParam = `?month=${selected.value}`
     else queryParam = `?date=${selected.value}`;
     const response = await axios.get(`http://localhost:3000/reports/${queryParam}`, { headers: { 'Authorization': token } });
+
     tableBody.textContent = ``;
+    tfoot.textContent = ``;
     if (type.value === 'date') {
         reportDate.textContent = selected.value;
         reportDesc.textContent = `Daily Report`;
@@ -73,6 +90,7 @@ form.addEventListener('submit', async (e) => {
     if (response.data.expenses.length === 0) {
         img.style.display = 'block';
         icon.style.display = 'none';
+        pages.innerHTML = ``;
         return;
     }
 
@@ -81,9 +99,13 @@ form.addEventListener('submit', async (e) => {
         addRow(item);
     })
 
-    lastPage = response.data.lastPage;
     value = selected.value;
+
+    addFoot(response.data.totalExpenses);
+
     showPages(response.data);
+
+
 
     icon.style.display = 'block';
 })
@@ -150,6 +172,25 @@ function addRow(item) {
 
 }
 
+function addFoot(totalExpenses) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+
+    td.setAttribute('colspan', '4');
+
+    td.textContent = `Total Expenses: ${totalExpenses}`;
+
+    tr.appendChild(td);
+
+    tfoot.appendChild(tr);
+
+}
+
+const pages = document.querySelector('.page-numbers');
+
+
+pages.addEventListener('click', updateTableData);
+
 async function updateTableData(e) {
     tableBody.innerHTML = ``;
     let page_no = e.target.textContent;
@@ -165,6 +206,7 @@ async function updateTableData(e) {
     }
 
     img.style.display = 'none';
+
     response.data.expenses.forEach((item) => {
         addRow(item);
     })
@@ -175,7 +217,6 @@ async function updateTableData(e) {
 
 }
 function showPages(data) {
-    const pages = document.querySelector('.page-numbers');
     pages.innerHTML = ``;
     const createButton = (pageNumber) => {
         const button = document.createElement('button');
@@ -184,7 +225,6 @@ function showPages(data) {
 
         if (pageNumber == data.current) button.classList.add('active');
 
-        button.addEventListener('click', updateTableData);
         pages.appendChild(button);
     }
 
@@ -193,6 +233,6 @@ function showPages(data) {
 
     createButton(data.current);
 
-    if (data.current < lastPage - 1) createButton(data.current + 1);
-    if (lastPage > data.current) createButton(lastPage);
+    if (data.current < data.lastPage - 1) createButton(data.current + 1);
+    if (data.lastPage > data.current) createButton(data.lastPage);
 }
