@@ -7,7 +7,7 @@ let current, lastPage;
 
 let edit, initialState;
 
-const baseUrl = 'http://localhost:3000/expenses';
+
 
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    const response = await axios.get(`http://localhost:3000/expenses?page_no=1`, { headers: { 'Authorization': token } });
+    const response = await axios.get(`${baseUrl}/expenses?page_no=1`, { headers: { 'Authorization': token } });
 
     const decodedTOken = parseJwt(token);
     username.textContent = decodedTOken.name;
@@ -64,7 +64,7 @@ async function addExpense(e) {
 
         try {
 
-            const response = await axios.patch(`http://localhost:3000/expenses/edit-expense/${expesneId}`, expenseData, { headers: { 'Authorization': token } });
+            const response = await axios.patch(`${baseUrl}/expenses/edit-expense/${expesneId}`, expenseData, { headers: { 'Authorization': token } });
             updateRow(response.data);
 
 
@@ -83,7 +83,7 @@ async function addExpense(e) {
     }
 
 
-    const response = await axios.post(`http://localhost:3000/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
+    const response = await axios.post(`${baseUrl}/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
     expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
     form.reset();
 
@@ -216,7 +216,7 @@ function triggerPreviousButton() {
 }
 
 document.getElementById('delete').addEventListener('click', function () {
-    axios.delete(`http://localhost:3000/expenses/${expesneId}`, { headers: { Authorization: token } })
+    axios.delete(`${baseUrl}/expenses/${expesneId}`, { headers: { Authorization: token } })
         .then(response => {
             const tr = document.getElementById(`expense-${expesneId}`);
             const amount = tr.querySelector('td:nth-child(4)').textContent;

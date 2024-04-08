@@ -3,8 +3,6 @@ const username = document.querySelector('.username');
 const premiumDiv = document.querySelector('.not-premium')
 const tableDiv = document.querySelector('.table-data');
 
-const baseUrl = 'http://localhost:3000/leaderboard';
-
 document.addEventListener("DOMContentLoaded", async (event) => {
 
    if(!token){
@@ -16,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
    username.textContent = decodedTOken.name;
    if (decodedTOken.isPremium === true) {
       tableDiv.style.display = 'flex';
-      const response = await axios.get(`http://localhost:3000/leaderboard`, { headers: { 'Authorization': token } });
+      const response = await axios.get(`${baseUrl}/premium/leaderboard`, { headers: { 'Authorization': token } });
 
       const { leaderboard, userRank } = response.data;
 
@@ -64,7 +62,7 @@ async function handlePayment() {
 
    try {
 
-      const response = await axios.get(`http://localhost:3000/purchase`, { headers: { 'Authorization': token } });
+      const response = await axios.get(`${baseUrl}/premium/purchase`, { headers: { 'Authorization': token } });
 
       console.log(response)
 
@@ -72,7 +70,7 @@ async function handlePayment() {
          'key': response.data.key_id,
          'order_id': response.data.order.id,
          'handler': async (response) => {
-            const res = await axios.post('http://localhost:3000/updatePayment', {
+            const res = await axios.post(`${baseUrl}/premium/updatePayment`, {
                orderId: options.order_id,
                paymentId: response.razorpay_payment_id,
                status: 'Successful'
@@ -93,7 +91,7 @@ async function handlePayment() {
    }
 
    rzp.on('payment.failed', async (response) => {
-      await axios.post('http://localhost:3000/updatePayment', {
+      await axios.post(`${baseUrl}/premium/updatePayment`, {
          orderId: options.order_id,
          payment_Id: response.razorpay_payment_id,
          status: 'Failure'
