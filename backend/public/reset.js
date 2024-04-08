@@ -1,5 +1,6 @@
-let form = document.querySelector('#form1');
+const baseUrl='http://ec2-3-110-86-43.ap-south-1.compute.amazonaws.com:3000'
 
+let form = document.querySelector('#form1');
 
 form.addEventListener('submit', reset);
 
@@ -19,7 +20,7 @@ async function reset(e) {
 
 
     try {
-        const res = await axios.post(`http://localhost:3000/password/forgot`, { mail });
+        const res = await axios.post(`${baseUrl}/password/forgot`, { mail });
         console.log(res);
         msg.textContent=`Reset link has been sent to your mail`
     }

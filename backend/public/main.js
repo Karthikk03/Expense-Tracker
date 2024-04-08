@@ -1,3 +1,12 @@
+const baseUrl='http://ec2-3-110-86-43.ap-south-1.compute.amazonaws.com:3000'
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if(localStorage.getItem('token')) window.location.href='expenses.html';
+
+})
+
+
 const container = document.getElementById('container');
 
 const loginForm = document.getElementById('login-form')
@@ -18,7 +27,7 @@ async function loginUser(e) {
 	try {
 		prevMail = mail.value;
 		prevPass = pass.value;
-		const response = await axios.post(`http://localhost:3000/user/login`, { email: mail.value, password: pass.value });
+		const response = await axios.post(`${baseUrl}/user/login`, { email: mail.value, password: pass.value });
 		console.log(response.data)
 		localStorage.setItem('token', response.data.token);
 		mail.value = '';

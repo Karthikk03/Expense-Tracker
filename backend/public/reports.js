@@ -1,14 +1,23 @@
+const baseUrl='http://ec2-3-110-86-43.ap-south-1.compute.amazonaws.com:3000';
+
 const notPremium = document.querySelector('.not-premium');
+
 let value;
 
 let tdate = document.querySelector('#report-date');
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+    if(!token){
+        window.location.href='index.html';
+        return;
+    }
+
     const currentDate = new Date().toISOString();
     const formattedDate = currentDate.split('T')[0];
     tdate.textContent = formattedDate;
     try {
-        const response = await axios.get(`http://localhost:3000/reports/?date=${formattedDate}`, { headers: { 'Authorization': token } });
+        const response = await axios.get(`${baseUrl}/reports/?date=${formattedDate}`, { headers: { 'Authorization': token } });
 
         const { expenses, totalExpenses } = response.data;
 
@@ -23,8 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         addFoot(totalExpenses)
-
-
         
         showPages(response.data);
     }
@@ -74,7 +81,7 @@ form.addEventListener('submit', async (e) => {
     let queryParam;
     if (selected === month) queryParam = `?month=${selected.value}`
     else queryParam = `?date=${selected.value}`;
-    const response = await axios.get(`http://localhost:3000/reports/${queryParam}`, { headers: { 'Authorization': token } });
+    const response = await axios.get(`${baseUrl}/reports/${queryParam}`, { headers: { 'Authorization': token } });
 
     tableBody.textContent = ``;
     tfoot.textContent = ``;
@@ -129,7 +136,7 @@ type.addEventListener('change', (e) => {
 
 
 async function downloadFile() {
-    const url = await axios.get(`http://localhost:3000/reports/download`, { headers: { 'Authorization': token } });
+    const url = await axios.get(`${baseUrl}/reports/download`, { headers: { 'Authorization': token } });
     console.log(url)
     window.location.href = url.data
 }
@@ -198,7 +205,7 @@ async function updateTableData(e) {
 
     if (selected === month) queryParam = `?month=${value}&page_no=${page_no}`
     else queryParam = `?date=${value}&page_no=${page_no}`;
-    const response = await axios.get(`http://localhost:3000/reports/${queryParam}`, { headers: { 'Authorization': token } });
+    const response = await axios.get(`${baseUrl}/reports/${queryParam}`, { headers: { 'Authorization': token } });
     if (response.data.expenses.length === 0) {
         img.style.display = 'block';
         icon.style.display = 'none';

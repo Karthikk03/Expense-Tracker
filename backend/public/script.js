@@ -1,3 +1,5 @@
+const baseUrl='http://ec2-3-110-86-43.ap-south-1.compute.amazonaws.com:3000'
+
 function parseJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -7,6 +9,14 @@ function parseJwt(token) {
 
     return JSON.parse(jsonPayload);
 }
+
+document.getElementById('logout').addEventListener('click', function() {
+    localStorage.removeItem('token');
+
+    window.location.href = 'index.html'; 
+});
+
+
 
 const menu = document.querySelector('#menu-bars');
 let navbar = document.querySelector('.navbar-menu');

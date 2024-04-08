@@ -1,5 +1,8 @@
 const express=require('express');
 const bodyparser=require('body-parser');
+
+require('dotenv').config();
+
 const sequelize=require('./util/database');
 
 const fs = require('fs');
@@ -33,20 +36,20 @@ app.use('/expenses',expenseRoutes);
 app.use('/incomes',incomeRoutes);
 app.use('/password',forgotRoute);
 app.use('/reports',reportsRoutes)
-app.use(premiumRoutes);
+app.use('/premium',premiumRoutes);
+
+app.use( (req, res) => {
+    res.sendFile(req.url,{root:'public'});
+})
 
 const User=require('./Models/User');
 const Expense=require('./Models/Expense');
-const Income=require('./Models/Income');
 const Order=require('./Models/Order');
 
 const ForgotRequest=require('./Models/ForgotRequests');
 
 Expense.belongsTo(User);
 User.hasMany(Expense);
-
-Income.belongsTo(User);
-User.hasMany(Income);
 
 Order.belongsTo(User);
 User.hasMany(Order);

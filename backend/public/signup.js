@@ -1,3 +1,11 @@
+const baseUrl='http://ec2-3-110-86-43.ap-south-1.compute.amazonaws.com:3000'
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if(localStorage.getItem('token')) window.location.href='expenses.html';
+
+})
+
 const container = document.getElementById('container');
 
 const form = document.getElementById('create-form');
@@ -27,7 +35,7 @@ async function createUser(e) {
 
 
 	try {
-		const response = await axios.post(`http://localhost:3000/user/create-user`, newUser);
+		const response = await axios.post(`${baseUrl}/user/create-user`, newUser);
 
 		localStorage.setItem('token',response.data.token);
 		name.value = '';

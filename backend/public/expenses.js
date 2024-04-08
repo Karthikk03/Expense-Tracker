@@ -7,20 +7,31 @@ let current, lastPage;
 
 let edit, initialState;
 
-const baseUrl = 'http://localhost:3000/expenses';
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const response = await axios.get(`http://localhost:3000/expenses?page_no=1`, { headers: { 'Authorization': token } });
+    try {
 
-    const decodedTOken = parseJwt(token);
-    username.textContent = decodedTOken.name;
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
 
-    response.data.expenses.forEach(item => {
-        addRow(item);
-    })
-    expenseAmount.textContent = response.data.totalExpense;
+        const response = await axios.get(`${baseUrl}/expenses?page_no=1`, { headers: { 'Authorization': token } });
 
-    updatePages(response.data);
+        const decodedTOken = parseJwt(token);
+        username.textContent = decodedTOken.name;
+
+        response.data.expenses.forEach(item => {
+            addRow(item);
+        })
+        expenseAmount.textContent = response.data.totalExpense;
+
+        updatePages(response.data);
+    }
+
+    catch(e){
+        console.log(e);
+    }
 
 })
 
@@ -58,7 +69,7 @@ async function addExpense(e) {
 
         try {
 
-            const response = await axios.patch(`http://localhost:3000/expenses/edit-expense/${expesneId}`, expenseData, { headers: { 'Authorization': token } });
+            const response = await axios.patch(`${baseUrl}/expenses/edit-expense/${expesneId}`, expenseData, { headers: { 'Authorization': token } });
             updateRow(response.data);
 
 
@@ -72,11 +83,12 @@ async function addExpense(e) {
             }, 3000)
         }
         edit = false;
+        form.reset();
         return;
     }
 
 
-    const response = await axios.post(`http://localhost:3000/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
+    const response = await axios.post(`${baseUrl}/expenses/add-expense`, expenseData, { headers: { 'Authorization': token } });
     expenseAmount.textContent = parseFloat(expenseAmount.textContent) + amount;
     form.reset();
 
@@ -148,6 +160,12 @@ function addRow(expense) {
 function updateRow(updatedExpense) {
     const row = tableBody.querySelector(`#expense-${expesneId}`);
 
+    const currentAmount = parseFloat(row.cells[3].textContent.split(' ')[1]);
+
+    if (currentAmount !== updatedExpense.amount) {
+        expenseAmount.textContent = parseFloat(expenseAmount.textContent) - currentAmount + updatedExpense.amount;
+    }
+
     row.cells[0].textContent = updatedExpense.description;
     row.cells[1].textContent = updatedExpense.category;
 
@@ -203,7 +221,7 @@ function triggerPreviousButton() {
 }
 
 document.getElementById('delete').addEventListener('click', function () {
-    axios.delete(`http://localhost:3000/expenses/${expesneId}`, { headers: { Authorization: token } })
+    axios.delete(`${baseUrl}/expenses/${expesneId}`, { headers: { Authorization: token } })
         .then(response => {
             const tr = document.getElementById(`expense-${expesneId}`);
             const amount = tr.querySelector('td:nth-child(4)').textContent;
