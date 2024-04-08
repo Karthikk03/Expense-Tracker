@@ -8,6 +8,14 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
+document.getElementById('logout').addEventListener('click', function() {
+    localStorage.removeItem('token');
+
+    window.location.href = 'index.html'; 
+});
+
+
+
 const menu = document.querySelector('#menu-bars');
 let navbar = document.querySelector('.navbar-menu');
 

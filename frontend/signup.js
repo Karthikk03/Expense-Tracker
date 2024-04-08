@@ -1,3 +1,9 @@
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if(localStorage.getItem('token')) window.location.href='expenses.html';
+
+})
+
 const container = document.getElementById('container');
 
 const form = document.getElementById('create-form');

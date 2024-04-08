@@ -6,6 +6,12 @@ const tableDiv = document.querySelector('.table-data');
 const baseUrl = 'http://localhost:3000/leaderboard';
 
 document.addEventListener("DOMContentLoaded", async (event) => {
+
+   if(!token){
+      window.location.href='index.html';
+      return;
+  }
+  
    const decodedTOken = parseJwt(token);
    username.textContent = decodedTOken.name;
    if (decodedTOken.isPremium === true) {

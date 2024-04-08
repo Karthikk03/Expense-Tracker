@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if(localStorage.getItem('token')) window.location.href='expenses.html';
+
+})
+
+
 const container = document.getElementById('container');
 
 const loginForm = document.getElementById('login-form')

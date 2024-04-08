@@ -10,6 +10,12 @@ let edit, initialState;
 const baseUrl = 'http://localhost:3000/expenses';
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+    if(!token){
+        window.location.href='index.html';
+        return;
+    }
+
     const response = await axios.get(`http://localhost:3000/expenses?page_no=1`, { headers: { 'Authorization': token } });
 
     const decodedTOken = parseJwt(token);
@@ -72,6 +78,7 @@ async function addExpense(e) {
             }, 3000)
         }
         edit = false;
+        form.reset();
         return;
     }
 
@@ -147,6 +154,12 @@ function addRow(expense) {
 
 function updateRow(updatedExpense) {
     const row = tableBody.querySelector(`#expense-${expesneId}`);
+
+    const currentAmount = parseFloat(row.cells[3].textContent.split(' ')[1]);
+
+    if(currentAmount!==updatedExpense.amount){
+        expenseAmount.textContent=parseFloat(expenseAmount.textContent)-currentAmount+updatedExpense.amount;
+    }
 
     row.cells[0].textContent = updatedExpense.description;
     row.cells[1].textContent = updatedExpense.category;

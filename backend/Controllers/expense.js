@@ -55,7 +55,7 @@ exports.getExpenses = async (req, res, next) => {
             offset: start,
         })
 
-        const lastPage = Math.max(Math.ceil(user.expenseCount / 6),1);
+        const lastPage = Math.max(Math.ceil(user.expenseCount / 6), 1);
         const current = parseInt(page_no);
         const totalExpense = user.totalExpense;
 
@@ -123,7 +123,14 @@ exports.update = async (req, res, next) => {
 
         const expenseData = req.body;
 
+        if (expenseData.amount !== expense.amount) {
+
+            await user.update({ totalExpense: user.totalExpense-expense.amount+expenseData.amount })
+        }
+
         await expense.update(expenseData);
+
+
 
         res.status(200).json(expense);
     }

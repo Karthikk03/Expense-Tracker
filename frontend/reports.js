@@ -4,6 +4,12 @@ let value;
 let tdate = document.querySelector('#report-date');
 
 document.addEventListener('DOMContentLoaded', async () => {
+
+    if(!token){
+        window.location.href='index.html';
+        return;
+    }
+
     const currentDate = new Date().toISOString();
     const formattedDate = currentDate.split('T')[0];
     tdate.textContent = formattedDate;
@@ -23,8 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         addFoot(totalExpenses)
-
-
         
         showPages(response.data);
     }
